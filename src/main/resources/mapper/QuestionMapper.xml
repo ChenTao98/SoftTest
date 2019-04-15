@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.softtest.softtest.dao.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.softtest.softtest.entity.Question">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_on" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="updated_on" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="authoring_finish_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="authoring_start_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="custom_field1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="custom_field2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="custom_field3" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="difficulty" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="memo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="multiple_choice" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="published" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="reviewing_finish_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="reviewing_start_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="score" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="author_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="knowledge_point" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="language" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="project_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="quality_admin_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="custom_filed1" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.softtest.softtest.entity.QuestionWithBLOBs">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="created_on" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="updated_on" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="authoring_finish_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="authoring_start_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="custom_field1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="custom_field2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="custom_field3" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="difficulty" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="memo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="multiple_choice" javaType="java.lang.Boolean" jdbcType="BIT" />
+      <arg column="published" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="reviewing_finish_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="reviewing_start_date" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="score" javaType="java.lang.Short" jdbcType="SMALLINT" />
+      <arg column="author_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="knowledge_point" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="language" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="project_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="quality_admin_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="type" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="custom_filed1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="scenario" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="stem" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, created_on, updated_on, authoring_finish_date, authoring_start_date, custom_field1, 
+    custom_field2, custom_field3, description, difficulty, memo, multiple_choice, published, 
+    reviewing_finish_date, reviewing_start_date, score, author_id, knowledge_point, language, 
+    project_id, quality_admin_id, status, type, custom_filed1
+  </sql>
+  <sql id="Blob_Column_List">
+    scenario, stem, remark
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.softtest.softtest.entity.QuestionExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.softtest.softtest.entity.QuestionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from question
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from question
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.softtest.softtest.entity.QuestionExample">
+    delete from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.softtest.softtest.entity.QuestionWithBLOBs">
+    insert into question (id, created_on, updated_on, 
+      authoring_finish_date, authoring_start_date, custom_field1, 
+      custom_field2, custom_field3, description, 
+      difficulty, memo, multiple_choice, 
+      published, reviewing_finish_date, reviewing_start_date, 
+      score, author_id, knowledge_point, 
+      language, project_id, quality_admin_id, 
+      status, type, custom_filed1, 
+      scenario, stem, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{createdOn,jdbcType=TIMESTAMP}, #{updatedOn,jdbcType=TIMESTAMP}, 
+      #{authoringFinishDate,jdbcType=DATE}, #{authoringStartDate,jdbcType=DATE}, #{customField1,jdbcType=VARCHAR}, 
+      #{customField2,jdbcType=VARCHAR}, #{customField3,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{difficulty,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR}, #{multipleChoice,jdbcType=BIT}, 
+      #{published,jdbcType=TIMESTAMP}, #{reviewingFinishDate,jdbcType=DATE}, #{reviewingStartDate,jdbcType=DATE}, 
+      #{score,jdbcType=SMALLINT}, #{authorId,jdbcType=INTEGER}, #{knowledgePoint,jdbcType=INTEGER}, 
+      #{language,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{qualityAdminId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{customFiled1,jdbcType=VARCHAR}, 
+      #{scenario,jdbcType=LONGVARCHAR}, #{stem,jdbcType=LONGVARCHAR}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.softtest.softtest.entity.QuestionWithBLOBs">
+    insert into question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createdOn != null">
+        created_on,
+      </if>
+      <if test="updatedOn != null">
+        updated_on,
+      </if>
+      <if test="authoringFinishDate != null">
+        authoring_finish_date,
+      </if>
+      <if test="authoringStartDate != null">
+        authoring_start_date,
+      </if>
+      <if test="customField1 != null">
+        custom_field1,
+      </if>
+      <if test="customField2 != null">
+        custom_field2,
+      </if>
+      <if test="customField3 != null">
+        custom_field3,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="difficulty != null">
+        difficulty,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="multipleChoice != null">
+        multiple_choice,
+      </if>
+      <if test="published != null">
+        published,
+      </if>
+      <if test="reviewingFinishDate != null">
+        reviewing_finish_date,
+      </if>
+      <if test="reviewingStartDate != null">
+        reviewing_start_date,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="authorId != null">
+        author_id,
+      </if>
+      <if test="knowledgePoint != null">
+        knowledge_point,
+      </if>
+      <if test="language != null">
+        language,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="qualityAdminId != null">
+        quality_admin_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="customFiled1 != null">
+        custom_filed1,
+      </if>
+      <if test="scenario != null">
+        scenario,
+      </if>
+      <if test="stem != null">
+        stem,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createdOn != null">
+        #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedOn != null">
+        #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authoringFinishDate != null">
+        #{authoringFinishDate,jdbcType=DATE},
+      </if>
+      <if test="authoringStartDate != null">
+        #{authoringStartDate,jdbcType=DATE},
+      </if>
+      <if test="customField1 != null">
+        #{customField1,jdbcType=VARCHAR},
+      </if>
+      <if test="customField2 != null">
+        #{customField2,jdbcType=VARCHAR},
+      </if>
+      <if test="customField3 != null">
+        #{customField3,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="difficulty != null">
+        #{difficulty,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="multipleChoice != null">
+        #{multipleChoice,jdbcType=BIT},
+      </if>
+      <if test="published != null">
+        #{published,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewingFinishDate != null">
+        #{reviewingFinishDate,jdbcType=DATE},
+      </if>
+      <if test="reviewingStartDate != null">
+        #{reviewingStartDate,jdbcType=DATE},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=SMALLINT},
+      </if>
+      <if test="authorId != null">
+        #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="knowledgePoint != null">
+        #{knowledgePoint,jdbcType=INTEGER},
+      </if>
+      <if test="language != null">
+        #{language,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="qualityAdminId != null">
+        #{qualityAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="customFiled1 != null">
+        #{customFiled1,jdbcType=VARCHAR},
+      </if>
+      <if test="scenario != null">
+        #{scenario,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="stem != null">
+        #{stem,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.softtest.softtest.entity.QuestionExample" resultType="java.lang.Long">
+    select count(*) from question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update question
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdOn != null">
+        created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedOn != null">
+        updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.authoringFinishDate != null">
+        authoring_finish_date = #{record.authoringFinishDate,jdbcType=DATE},
+      </if>
+      <if test="record.authoringStartDate != null">
+        authoring_start_date = #{record.authoringStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.customField1 != null">
+        custom_field1 = #{record.customField1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customField2 != null">
+        custom_field2 = #{record.customField2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customField3 != null">
+        custom_field3 = #{record.customField3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.difficulty != null">
+        difficulty = #{record.difficulty,jdbcType=INTEGER},
+      </if>
+      <if test="record.memo != null">
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.multipleChoice != null">
+        multiple_choice = #{record.multipleChoice,jdbcType=BIT},
+      </if>
+      <if test="record.published != null">
+        published = #{record.published,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.reviewingFinishDate != null">
+        reviewing_finish_date = #{record.reviewingFinishDate,jdbcType=DATE},
+      </if>
+      <if test="record.reviewingStartDate != null">
+        reviewing_start_date = #{record.reviewingStartDate,jdbcType=DATE},
+      </if>
+      <if test="record.score != null">
+        score = #{record.score,jdbcType=SMALLINT},
+      </if>
+      <if test="record.authorId != null">
+        author_id = #{record.authorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.knowledgePoint != null">
+        knowledge_point = #{record.knowledgePoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.language != null">
+        language = #{record.language,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectId != null">
+        project_id = #{record.projectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.qualityAdminId != null">
+        quality_admin_id = #{record.qualityAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.customFiled1 != null">
+        custom_filed1 = #{record.customFiled1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scenario != null">
+        scenario = #{record.scenario,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.stem != null">
+        stem = #{record.stem,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update question
+    set id = #{record.id,jdbcType=INTEGER},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      authoring_finish_date = #{record.authoringFinishDate,jdbcType=DATE},
+      authoring_start_date = #{record.authoringStartDate,jdbcType=DATE},
+      custom_field1 = #{record.customField1,jdbcType=VARCHAR},
+      custom_field2 = #{record.customField2,jdbcType=VARCHAR},
+      custom_field3 = #{record.customField3,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      difficulty = #{record.difficulty,jdbcType=INTEGER},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      multiple_choice = #{record.multipleChoice,jdbcType=BIT},
+      published = #{record.published,jdbcType=TIMESTAMP},
+      reviewing_finish_date = #{record.reviewingFinishDate,jdbcType=DATE},
+      reviewing_start_date = #{record.reviewingStartDate,jdbcType=DATE},
+      score = #{record.score,jdbcType=SMALLINT},
+      author_id = #{record.authorId,jdbcType=INTEGER},
+      knowledge_point = #{record.knowledgePoint,jdbcType=INTEGER},
+      language = #{record.language,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      quality_admin_id = #{record.qualityAdminId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      custom_filed1 = #{record.customFiled1,jdbcType=VARCHAR},
+      scenario = #{record.scenario,jdbcType=LONGVARCHAR},
+      stem = #{record.stem,jdbcType=LONGVARCHAR},
+      remark = #{record.remark,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update question
+    set id = #{record.id,jdbcType=INTEGER},
+      created_on = #{record.createdOn,jdbcType=TIMESTAMP},
+      updated_on = #{record.updatedOn,jdbcType=TIMESTAMP},
+      authoring_finish_date = #{record.authoringFinishDate,jdbcType=DATE},
+      authoring_start_date = #{record.authoringStartDate,jdbcType=DATE},
+      custom_field1 = #{record.customField1,jdbcType=VARCHAR},
+      custom_field2 = #{record.customField2,jdbcType=VARCHAR},
+      custom_field3 = #{record.customField3,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      difficulty = #{record.difficulty,jdbcType=INTEGER},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      multiple_choice = #{record.multipleChoice,jdbcType=BIT},
+      published = #{record.published,jdbcType=TIMESTAMP},
+      reviewing_finish_date = #{record.reviewingFinishDate,jdbcType=DATE},
+      reviewing_start_date = #{record.reviewingStartDate,jdbcType=DATE},
+      score = #{record.score,jdbcType=SMALLINT},
+      author_id = #{record.authorId,jdbcType=INTEGER},
+      knowledge_point = #{record.knowledgePoint,jdbcType=INTEGER},
+      language = #{record.language,jdbcType=INTEGER},
+      project_id = #{record.projectId,jdbcType=INTEGER},
+      quality_admin_id = #{record.qualityAdminId,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      custom_filed1 = #{record.customFiled1,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.softtest.softtest.entity.QuestionWithBLOBs">
+    update question
+    <set>
+      <if test="createdOn != null">
+        created_on = #{createdOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedOn != null">
+        updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authoringFinishDate != null">
+        authoring_finish_date = #{authoringFinishDate,jdbcType=DATE},
+      </if>
+      <if test="authoringStartDate != null">
+        authoring_start_date = #{authoringStartDate,jdbcType=DATE},
+      </if>
+      <if test="customField1 != null">
+        custom_field1 = #{customField1,jdbcType=VARCHAR},
+      </if>
+      <if test="customField2 != null">
+        custom_field2 = #{customField2,jdbcType=VARCHAR},
+      </if>
+      <if test="customField3 != null">
+        custom_field3 = #{customField3,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="difficulty != null">
+        difficulty = #{difficulty,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="multipleChoice != null">
+        multiple_choice = #{multipleChoice,jdbcType=BIT},
+      </if>
+      <if test="published != null">
+        published = #{published,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reviewingFinishDate != null">
+        reviewing_finish_date = #{reviewingFinishDate,jdbcType=DATE},
+      </if>
+      <if test="reviewingStartDate != null">
+        reviewing_start_date = #{reviewingStartDate,jdbcType=DATE},
+      </if>
+      <if test="score != null">
+        score = #{score,jdbcType=SMALLINT},
+      </if>
+      <if test="authorId != null">
+        author_id = #{authorId,jdbcType=INTEGER},
+      </if>
+      <if test="knowledgePoint != null">
+        knowledge_point = #{knowledgePoint,jdbcType=INTEGER},
+      </if>
+      <if test="language != null">
+        language = #{language,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="qualityAdminId != null">
+        quality_admin_id = #{qualityAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="customFiled1 != null">
+        custom_filed1 = #{customFiled1,jdbcType=VARCHAR},
+      </if>
+      <if test="scenario != null">
+        scenario = #{scenario,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="stem != null">
+        stem = #{stem,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.softtest.softtest.entity.QuestionWithBLOBs">
+    update question
+    set created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      authoring_finish_date = #{authoringFinishDate,jdbcType=DATE},
+      authoring_start_date = #{authoringStartDate,jdbcType=DATE},
+      custom_field1 = #{customField1,jdbcType=VARCHAR},
+      custom_field2 = #{customField2,jdbcType=VARCHAR},
+      custom_field3 = #{customField3,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      difficulty = #{difficulty,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR},
+      multiple_choice = #{multipleChoice,jdbcType=BIT},
+      published = #{published,jdbcType=TIMESTAMP},
+      reviewing_finish_date = #{reviewingFinishDate,jdbcType=DATE},
+      reviewing_start_date = #{reviewingStartDate,jdbcType=DATE},
+      score = #{score,jdbcType=SMALLINT},
+      author_id = #{authorId,jdbcType=INTEGER},
+      knowledge_point = #{knowledgePoint,jdbcType=INTEGER},
+      language = #{language,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      quality_admin_id = #{qualityAdminId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      custom_filed1 = #{customFiled1,jdbcType=VARCHAR},
+      scenario = #{scenario,jdbcType=LONGVARCHAR},
+      stem = #{stem,jdbcType=LONGVARCHAR},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.softtest.softtest.entity.Question">
+    update question
+    set created_on = #{createdOn,jdbcType=TIMESTAMP},
+      updated_on = #{updatedOn,jdbcType=TIMESTAMP},
+      authoring_finish_date = #{authoringFinishDate,jdbcType=DATE},
+      authoring_start_date = #{authoringStartDate,jdbcType=DATE},
+      custom_field1 = #{customField1,jdbcType=VARCHAR},
+      custom_field2 = #{customField2,jdbcType=VARCHAR},
+      custom_field3 = #{customField3,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      difficulty = #{difficulty,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR},
+      multiple_choice = #{multipleChoice,jdbcType=BIT},
+      published = #{published,jdbcType=TIMESTAMP},
+      reviewing_finish_date = #{reviewingFinishDate,jdbcType=DATE},
+      reviewing_start_date = #{reviewingStartDate,jdbcType=DATE},
+      score = #{score,jdbcType=SMALLINT},
+      author_id = #{authorId,jdbcType=INTEGER},
+      knowledge_point = #{knowledgePoint,jdbcType=INTEGER},
+      language = #{language,jdbcType=INTEGER},
+      project_id = #{projectId,jdbcType=INTEGER},
+      quality_admin_id = #{qualityAdminId,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      custom_filed1 = #{customFiled1,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
