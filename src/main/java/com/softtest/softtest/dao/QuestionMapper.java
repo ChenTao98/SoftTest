@@ -1,9 +1,9 @@
 package com.softtest.softtest.dao;
 
-import com.softtest.softtest.entity.Question;
-import com.softtest.softtest.entity.QuestionExample;
-import com.softtest.softtest.entity.QuestionWithBLOBs;
+import com.softtest.softtest.entity.*;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface QuestionMapper {
@@ -34,4 +34,6 @@ public interface QuestionMapper {
     int updateByPrimaryKeyWithBLOBs(QuestionWithBLOBs record);
 
     int updateByPrimaryKey(Question record);
+
+    List<QuestionInfo> selectQuestionInfo(QuestionInfoExample example);
 }
