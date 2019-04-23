@@ -28,8 +28,8 @@ function showData(data) {
             "<td class='list'>" + question.score + "</td>" +
             "<td class='list'>" + question.stem + "</td>" +
             "<td class='list'>" + question.type + "</td>" +
-            "<td class='list'><span class='label label-success btn-add'>添加</span></td>" +
-            "<td class='list'><span class='label label-info btn-preview' data-toggle='modal' data-target='#displayDetail'>预览</span></td>" +
+            "<td class='list'><span class='label label-success btn-add' data-id='" + i + "'>添加</span></td>" +
+            "<td class='list'><span class='label label-info btn-preview' data-id='" + i + "' data-toggle='modal' data-target='#displayDetail'>预览</span></td>" +
             "</tr>";
         $("#result-body").append(row);
     });
@@ -113,5 +113,39 @@ window.onload = function () {
                 showData(data);
             }
         });
+    });
+
+    //预览某一题目具体信息
+    $('#displayDetail').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var id = button.data('id');//在上面自定义的 [data-id] 中传入
+        //TODO 使用ajax获取题目信息
+        var modal = $(this);
+        modal.find('.modal-type').text("单选题");//题目类型
+        modal.find('#title').text("1 + 1 = ?");//题干
+        modal.find('#answer').text("王");//答案
+        modal.find('#analysis').text("这是一道语文题");//解析
+    });
+
+    //预览试卷
+    $('#displayPaper').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        //TODO 获取所有被添加的题目信息
+        var modal = $(this);
+        modal.find('#title').text("复旦大学2019年《软件测试与质量保证》期末试卷");//试卷名
+        //if multiple-choice-question-list.length > 0 display else display none
+        //TODO
+        if (true) {
+            modal.find('#multiple-choice-question h1').text("一、单选题");//单选题，如果所添加的题目中有此类型，则显示，否则其 display = none
+            //具体题目信息……
+            //例如：
+            var problem = modal.find('#multiple-choice-question .problem');
+            problem.find('h3').text("1、选择你认为正确的答案");
+            problem.find('.choice-one').html("<span>A、选我</span><br><span>B、不要选我</span><br><span>C、都选C</span><br><span>D、根本没有D选项好吧～</span>");
+            problem.find('#problem-solving .well').text("我也不知道正确答案是什么～～");
+        } else
+            modal.find('#multiple-choice-question').css('display', 'none');
+        //其他各种体型……
+        modal.find('#multiple-choice-questions');
     });
 };

@@ -7,7 +7,8 @@
 </head>
 <body>
 <div id="paper" th:fragment="paper-fragment">
-    <button  id="btn-preview" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#displayPaper">
+    <button id="btn-preview" type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+            data-target="#displayPaper">
         试卷预览
     </button>
     <div id="displayPaper" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="title">
@@ -21,27 +22,36 @@
                 <div class="modal-body">
                     <div id="multiple-choice-question" class=".">
                         <h1>一、选择题</h1>
-                        <h3>1、balabala</h3>
-                        <div class="choice-one"><span>A、选我</span><br><span>B、不要选我</span><br><span>C、都选C</span><br><span>D、根本没有D选项好吧～</span>
-                        </div>
-                        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#first-problem-solving"
-                           aria-expanded="false" aria-controls="collapseExample">
-                            答案解析
-                        </a>
-                        <div id="first-problem-solving" class="collapse">
-                            <div class="well">
-                                答案解析……
+                        <div class="problem">
+                            <h3></h3>
+                            <div class="choice-one">
+
+                            </div>
+                            <a class="btn btn-primary" role="button" data-toggle="collapse"
+                               href="#problem-solving"
+                               aria-expanded="false" aria-controls="collapseExample">
+                                答案解析
+                            </a>
+                            <div id="problem-solving" class="collapse">
+                                <div class="well">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class=".">
-                        <h1>二、简答题</h1>
+                    <div id="multiple-choice-questions" class=".">
+                        <h1>二、多选题</h1>
                     </div>
-                    <div class=".">
-                        <h1>三、分析应用题</h1>
+                    <div id="scene" class=".">
+                        <h1>三、情景类</h1>
+                    </div>
+                    <div id="video" class=".">
+                        <h1>四、视频类</h1>
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">导出试卷</button>
+                    <button type="button" class="btn btn-info">导出答案</button>
+                    <button type="button" class="btn btn-success">导出试卷&答案</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">结束预览</button>
                 </div>
             </div>

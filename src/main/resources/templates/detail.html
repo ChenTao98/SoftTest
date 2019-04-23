@@ -7,19 +7,19 @@
 <body>
 <br>
 <div id="detail" th:fragment="detail-fragment">
-    <div id="displayDetail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="title">
+    <div id="displayDetail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="type">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 id="title" class="modal-title">类型</h4>
+                    <h4 id="type" class="modal-type"></h4>
                 </div>
                 <div class="modal-body">
-                    <h2>题干</h2>
-                    <div>答案</div>
+                    <h2 id="title"></h2>
+                    <div id="answer"></div>
                     <br>
-                    <div class="well">答案解析</div>
+                    <div id="analysis" class="well"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">结束预览</button>
