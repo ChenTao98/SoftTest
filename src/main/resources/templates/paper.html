@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Paper</title>
+</head>
+<body>
+<div id="paper" th:fragment="paper-fragment">
+    <button  id="btn-preview" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#displayPaper">
+        试卷预览
+    </button>
+    <div id="displayPaper" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 id="title" class="modal-title">复旦大学2019年《软件测试与质量保证》期末试卷</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="multiple-choice-question" class=".">
+                        <h1>一、选择题</h1>
+                        <h3>1、balabala</h3>
+                        <div class="choice-one"><span>A、选我</span><br><span>B、不要选我</span><br><span>C、都选C</span><br><span>D、根本没有D选项好吧～</span>
+                        </div>
+                        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#first-problem-solving"
+                           aria-expanded="false" aria-controls="collapseExample">
+                            答案解析
+                        </a>
+                        <div id="first-problem-solving" class="collapse">
+                            <div class="well">
+                                答案解析……
+                            </div>
+                        </div>
+                    </div>
+                    <div class=".">
+                        <h1>二、简答题</h1>
+                    </div>
+                    <div class=".">
+                        <h1>三、分析应用题</h1>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">结束预览</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

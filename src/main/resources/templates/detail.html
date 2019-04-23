@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+</head>
+<body>
+<br>
+<div id="detail" th:fragment="detail-fragment">
+    <div id="displayDetail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="title">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 id="title" class="modal-title">类型</h4>
+                </div>
+                <div class="modal-body">
+                    <h2>题干</h2>
+                    <div>答案</div>
+                    <br>
+                    <div class="well">答案解析</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">结束预览</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

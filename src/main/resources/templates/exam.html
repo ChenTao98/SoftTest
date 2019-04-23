@@ -1,177 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Exam Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/exam.css}"/>
 </head>
 <body>
-    <h1>Hello Exam!</h1>
-    <div id="search-block">
-        <div id="typeSelect">
-            <label>按照题目类型</label>
-            <select>
-                <option th:each="type : ${typeList}" th:value="${type.id}" th:text="${type.name}"></option>
-            </select>
-            <button id="btn-type">查找</button>
+<div id="wrapper">
+    <div id="main" class="container">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h1>Hello Exam!</h1></div>
+            <div class="panel-body">
+                <p>选择合适的题目添加到试卷</p>
+            </div>
         </div>
+        <div class="bd-example">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">题目类型</th>
+                    <th scope="col">知识点</th>
+                    <th scope="col">项目</th>
+                    <th scope="col">作者</th>
+                    <th scope="col">语言</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="list">
+                        <select id="typeSelect" class="select">
+                            <option>请选择</option>
+                            <option th:each="type : ${typeList}" th:value="${type.id}" th:text="${type.name}"></option>
+                        </select>
+                    </td>
+                    <td class="list">
+                        <select id="knowledgePointSelect" class="select">
+                            <option>请选择</option>
+                            <option class="select-option" th:each="knowledgePoint: ${knowledgePointList}"
+                                    th:value="${knowledgePoint.id}"
+                                    th:text="${knowledgePoint.title}"></option>
+                        </select>
+                    </td>
+                    <td class="list">
+                        <select id="projectSelect" class="select">
+                            <option>请选择</option>
+                            <option th:each="project: ${projectList}" th:value="${project.id}"
+                                    th:text="${project.name}"></option>
+                        </select>
+                    </td>
+                    <td class="list">
+                        <select id="authorSelect" class="select">
+                            <option>请选择</option>
+                            <option th:each="author: ${authorList}" th:value="${author.id}"
+                                    th:text="${author.username}"></option>
+                        </select>
+                    </td>
+                    <td class="list">
+                        <select id="languageSelect" class="select">
+                            <option>请选择</option>
+                            <option th:each="language: ${languageList}" th:value="${language.id}"
+                                    th:text="${language.name}"></option>
+                        </select>
+                    </td>
+                </tr>
 
-        <div id="knowledgePointSelect">
-            <label>按照知识点</label>
-            <select>
-                <option th:each="knowledgePoint: ${knowledgePointList}" th:value="${knowledgePoint.id}"
-                        th:text="${knowledgePoint.title}"></option>
-            </select>
-            <button id="btn-knowledge-point">查找</button>
+                </tbody>
+            </table>
         </div>
-
-        <div id="projectSelect">
-            <label>按照项目</label>
-            <select>
-                <option th:each="project: ${projectList}" th:value="${project.id}"
-                        th:text="${project.name}"></option>
-            </select>
-            <button id="btn-project">查找</button>
-        </div>
-
-        <div id="authorSelect">
-            <label>按照作者</label>
-            <select>
-                <option th:each="author: ${authorList}" th:value="${author.id}"
-                        th:text="${author.username}"></option>
-            </select>
-            <button id="btn-author">查找</button>
-        </div>
-
-        <div id="languageSelect">
-            <label>按照语言</label>
-            <select>
-                <option th:each="language: ${languageList}" th:value="${language.id}" th:text="${language.name}"></option>
-            </select>
-            <button id="btn-language">查找</button>
+        <div id="result">
+            <table id="result-detail" class="table table-bordered table-striped">
+                <caption id="result-info"></caption>
+                <thead id="result-head" class="thead-dark"></thead>
+                <tbody id="result-body"></tbody>
+            </table>
         </div>
     </div>
-
-
-    <div id="result" style="margin-top:20px; overflow: scroll; height: 200px;">
-        <h3 id="resultInfo">Result</h3>
-        <table id="result-table">
-            <tr>
-                <th>作者</th>
-                <th>难度</th>
-                <th>知识点</th>
-                <th>语言</th>
-                <th>项目</th>
-                <th>分数</th>
-                <th>题干</th>
-                <th>类型</th>
-                <th>添加</th>
-            </tr>
-        </table>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-
-    <script>
-        function showData(data) {
-            $("#result-table").html("<tr>\n" +
-                "                <th>作者</th>\n" +
-                "                <th>难度</th>\n" +
-                "                <th>知识点</th>\n" +
-                "                <th>语言</th>\n" +
-                "                <th>项目</th>\n" +
-                "                <th>分数</th>\n" +
-                "                <th>题干</th>\n" +
-                "                <th>类型</th>\n" +
-                "                <th>添加</th>\n" +
-                "            </tr>");
-            if (data.length == 0) {
-                $("#resultInfo").html("No result!");
-                return;
-            }
-            $("#resultInfo").html("Has result!");
-            $.each(data, function (i, question) {
-                var row = "<tr><td>"+ question.author + "</td><td>"
-                    + question.difficulty + "</td><td>"
-                    + question.knowledgePoint + "</td><td>"
-                    + question.language + "</td><td>"
-                    + question.project + "</td><td>"
-                    + question.score + "</td><td>"
-                    + question.stem + "</td><td>"
-                    + question.type + "</td><td><button>添加</button></td></tr>";
-                $("#result-table").append(row);
-            });
-        }
-        window.onload = function () {
-            $("#btn-type").click(function (event) {
-                var typeId = $("#typeSelect option:selected").val();
-                console.log(typeId);
-                // 获取文本用 $("#typeSelect option:selected").text()
-                $.ajax({
-                    url: "/api/type/"+typeId,
-                    type: "POST",
-                    dataType: "json",
-                    success: function(data) {
-                        console.log(data);
-                        showData(data);
-                        // data = jQuery.parseJSON(data);  //dataType指明了返回数据为json类型，故不需要再反序列化
-                    }
-                });
-            });
-
-            $("#btn-knowledge-point").click(function (event) {
-                var knowledgeId = $("#knowledgePointSelect option:selected").val();
-                $.ajax({
-                    url: "/api/knowledgePoint/" + knowledgeId,
-                    type: "POST",
-                    dataType: "json",
-                    success: function(data) {
-                        console.log(data);
-                        showData(data);
-                    }
-                });
-            });
-
-            $("#btn-project").click(function (event) {
-                var projectId = $("#projectSelect option:selected").val();
-                $.ajax({
-                    url: "/api/project/"+projectId,
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        showData(data);
-                    }
-                });
-            });
-
-            $("#btn-author").click(function (event) {
-                var authorId = $("#authorSelect option:selected").val();
-                $.ajax({
-                    url: "/api/author/" + authorId,
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        showData(data);
-                    }
-                });
-            });
-
-            $("#btn-language").click(function (event) {
-                var languageId = $("#languageSelect option:selected").val();
-                $.ajax({
-                    url: "/api/language/"+languageId,
-                    type: "POST",
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        showData(data);
-                    }
-                });
-            });
-        }
-    </script>
-
+    <div th:replace="~{detail :: detail-fragment}"></div>
+    <div th:replace="~{paper :: paper-fragment}"></div>
+</div>
 
 </body>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+<script th:src="@{/js/exam.js}"></script>
 </html>
