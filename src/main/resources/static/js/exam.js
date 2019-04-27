@@ -28,14 +28,43 @@ function showData(data) {
             "<td class='list'>" + question.score + "</td>" +
             "<td class='list'>" + question.stem + "</td>" +
             "<td class='list'>" + question.type + "</td>" +
-            "<td class='list'><span class='label label-success btn-add' data-id='" + i + "'>添加</span></td>" +
+            "<td class='list'><span class='label label-success btn-add' data-id='" + i + "' onclick='addQuestion("+ question.questionId + ")'>添加</span></td>" +
             "<td class='list'><span class='label label-info btn-preview' data-id='" + i + "' data-toggle='modal' data-target='#displayDetail'>预览</span></td>" +
             "</tr>";
         $("#result-body").append(row);
     });
 }
 
+function addQuestion(questionId) {
+    $.ajax({
+        url: "/api/question/"+questionId,
+        type: "POST",
+        dataType: "json",
+        success: function (question) {
+            console.log(question);
+            window.type2Questions[question.type].push(question);
+            console.log(window.type2Questions);
+        }
+    });
+}
+
 window.onload = function () {
+    // 获取所有题型，并创建表
+    // window.type2Questions 是一个字典， key时typeName， 值为被选中的问题。
+    $.ajax({
+        url: "/api/type/getAllTypes",
+        type: "POST",
+        dataType: "json",
+        success: function(data) {
+            console.log("Type Data: ");
+            console.log(data);
+            window.type2Questions = {};
+            $.each(data, function (i, type) {
+                window.type2Questions[type.name] = [];
+            });
+        }
+    });
+    // window.selfDefinedData.QuestionRow = [0, 1, 2, 3, 4, 5]
     $.ajax({
         url: "/api/type/17",
         type: "POST",
@@ -129,12 +158,17 @@ window.onload = function () {
 
     //预览试卷
     $('#displayPaper').on('show.bs.modal', function (event) {
+        // window.type2Questions
         var button = $(event.relatedTarget);
         //TODO 获取所有被添加的题目信息
         var modal = $(this);
         modal.find('#title').text("复旦大学2019年《软件测试与质量保证》期末试卷");//试卷名
         //if multiple-choice-question-list.length > 0 display else display none
         //TODO
+        console.log("被选中的问题如下： ");
+        console.log(window.type2Questions);
+
+
         if (true) {
             modal.find('#multiple-choice-question h1').text("一、单选题");//单选题，如果所添加的题目中有此类型，则显示，否则其 display = none
             //具体题目信息……

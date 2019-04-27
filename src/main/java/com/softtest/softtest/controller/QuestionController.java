@@ -2,6 +2,7 @@ package com.softtest.softtest.controller;
 
 import com.softtest.softtest.entity.Question;
 import com.softtest.softtest.entity.QuestionInfo;
+import com.softtest.softtest.entity.QuestionType;
 import com.softtest.softtest.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,19 @@ import java.util.List;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+
+    @RequestMapping(value = "/question/{questionId}", produces = "application/json;charset=UTF-8")
+    public QuestionInfo getQuestionByQuestionId(@PathVariable("questionId") Integer questionId) {
+        QuestionInfo question = questionService.getQuestionByQuestionId(questionId).get(0);
+        return question;
+    }
+
+    @RequestMapping(value = "/type/getAllTypes", produces = "application/json;charset=UTF-8")
+    public List<QuestionType> getQuestionByQuestionId() {
+        List<QuestionType> types = questionService.getQuestionType();
+        return types;
+    }
+
 
     @RequestMapping(value = "/type/{typeId}", produces = "application/json;charset=UTF-8")
     public List<QuestionInfo> getQuestionsByTypeId(@PathVariable("typeId") Integer typeId) {
