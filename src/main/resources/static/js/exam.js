@@ -13,7 +13,8 @@ function showData(data) {
         "                <th scope='col' class='head-item'>添加</th>\n" +
         "                <th scope='col' class='head-item'>预览</th>\n" +
         "            </tr>");
-    $("#result-body").html("");//清空上次查询结果
+    var body = $("#result-body");
+    body.html("");//清空上次查询结果
     if (data.length === 0) {
         return;
     }
@@ -27,24 +28,14 @@ function showData(data) {
             "<td class='list'>" + question.project + "</td>" +
             "<td class='list'>" + question.score + "</td>" +
             "<td class='list'>" + question.stem + "</td>" +
-            "<td class='list'>" + question.type + "</td>" +
-            "<td class='list'><span class='label label-success btn-add' data-id='" + i + "' onclick='addQuestion("+ question.questionId + ")'>添加</span></td>" +
-            "<td class='list'><span class='label label-info btn-preview' data-id='" + i + "' data-toggle='modal' data-target='#displayDetail'>预览</span></td>" +
-            "</tr>";
-        $("#result-body").append(row);
-    });
-}
-
-function addQuestion(questionId) {
-    $.ajax({
-        url: "/api/question/"+questionId,
-        type: "POST",
-        dataType: "json",
-        success: function (question) {
-            console.log(question);
-            window.type2Questions[question.type].push(question);
-            console.log(window.type2Questions);
+            "<td class='list'>" + question.type + "</td>";
+        if ($.isEmptyObject(window.type2Questions[question.type][question.questionId])) {
+            row += "<td class='list'><span class='label label-success btn-add' data-id='" + question.questionId + "'>添加</span></td>";
+        } else {
+            row += "<td class='list'><span class='label label-danger btn-add' data-id='" + question.questionId + "'>移除</span></td>";
         }
+        row += "<td class='list'><span class='label label-info btn-preview' data-id='" + question.questionId + "' data-toggle='modal' data-target='#displayDetail'>预览</span></td></tr>";
+        $("#result-body").append(row);
     });
 }
 
@@ -55,12 +46,12 @@ window.onload = function () {
         url: "/api/type/getAllTypes",
         type: "POST",
         dataType: "json",
-        success: function(data) {
+        success: function (data) {
             console.log("Type Data: ");
             console.log(data);
             window.type2Questions = {};
             $.each(data, function (i, type) {
-                window.type2Questions[type.name] = [];
+                window.type2Questions[type.name] = {};
             });
         }
     });
@@ -144,42 +135,84 @@ window.onload = function () {
         });
     });
 
+    $("#result-body").on('click', '.btn-add', function () {
+        var id = $(this).data('id');
+        if ($(this).hasClass("label-success")) {
+            $.ajax({
+                url: "/api/question/" + id,
+                type: "POST",
+                dataType: "json",
+                success: function (question) {
+                    window.type2Questions[question.type][question.questionId] = question;
+                    console.log(window.type2Questions);
+                }
+            });
+            $(this).removeClass('label-success').addClass('label-danger').text("移除")
+        } else {
+            $.ajax({
+                url: "/api/question/" + id,
+                type: "POST",
+                dataType: "json",
+                success: function (question) {
+                    delete window.type2Questions[question.type][question.questionId];
+                    console.log(window.type2Questions[question.type]['count']);
+                }
+            });
+            $(this).removeClass('label-danger').addClass('label-success').text("添加")
+        }
+    });
+
     //预览某一题目具体信息
     $('#displayDetail').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var id = button.data('id');//在上面自定义的 [data-id] 中传入
-        //TODO 使用ajax获取题目信息
         var modal = $(this);
-        modal.find('.modal-type').text("单选题");//题目类型
-        modal.find('#title').text("1 + 1 = ?");//题干
-        modal.find('#answer').text("王");//答案
-        modal.find('#analysis').text("这是一道语文题");//解析
+        $.ajax({
+            url: "/api/question/" + id,
+            type: "POST",
+            dataType: "json",
+            success: function (question) {
+                modal.find('.modal-type').text(question.type);//题目类型
+                modal.find('#title').html(question.stem);//题干
+                modal.find('#answer').text("答案：无");//答案
+                modal.find('#analysis').text("解析：无");//解析
+            }
+        });
     });
 
     //预览试卷
     $('#displayPaper').on('show.bs.modal', function (event) {
         // window.type2Questions
-        var button = $(event.relatedTarget);
-        //TODO 获取所有被添加的题目信息
         var modal = $(this);
         modal.find('#title').text("复旦大学2019年《软件测试与质量保证》期末试卷");//试卷名
-        //if multiple-choice-question-list.length > 0 display else display none
-        //TODO
         console.log("被选中的问题如下： ");
+        var body = modal.find(".modal-body");
+        body.html("");
         console.log(window.type2Questions);
+        $.each(window.type2Questions, function (type, questions) {
+            console.log(type);
+            if (!$.isEmptyObject(questions)) {
+                body.append(
+                    "<div class='.'>" +
+                    "<h1>" + type + "</h1>"
+                );
+                var idx = 1;
+                $.each(questions, function (id, question) {
+                    console.log(question);
+                    body.append(parseToQuestion(question, idx++))
+                });
+                body.append("</div>")
+            }
 
-
-        if (true) {
-            modal.find('#multiple-choice-question h1').text("一、单选题");//单选题，如果所添加的题目中有此类型，则显示，否则其 display = none
-            //具体题目信息……
-            //例如：
-            var problem = modal.find('#multiple-choice-question .problem');
-            problem.find('h3').text("1、选择你认为正确的答案");
-            problem.find('.choice-one').html("<span>A、选我</span><br><span>B、不要选我</span><br><span>C、都选C</span><br><span>D、根本没有D选项好吧～</span>");
-            problem.find('#problem-solving .well').text("我也不知道正确答案是什么～～");
-        } else
-            modal.find('#multiple-choice-question').css('display', 'none');
-        //其他各种体型……
-        modal.find('#multiple-choice-questions');
+        });
     });
+
+    function parseToQuestion(question, idx) {
+        return "<div class='question'>" +
+            "<h3>" + question.stem + "<span>[" + question.score + "分]</span></h3>" +
+            "<a class='btn btn-primary' role='button' data-toggle='collapse'\n href='#problem-solving-" + idx + "' " +
+            "aria-expanded='false' aria-controls='collapseExample'>答案解析：</a>" +
+            "<div id='problem-solving-" + idx + "' class='collapse'><div class='well'>无</div></div></div>"
+    }
+
 };
