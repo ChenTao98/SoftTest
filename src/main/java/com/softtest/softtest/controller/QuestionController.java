@@ -7,6 +7,7 @@ import com.softtest.softtest.service.QuestionService;
 import com.softtest.softtest.util.ApiResult;
 import com.softtest.softtest.util.errCode.ErrorCode;
 import com.softtest.softtest.util.errCode.sub.QuestionAlreadyAddedException;
+import com.softtest.softtest.util.errCode.sub.QuestionAlreadyDeletedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +80,38 @@ public class QuestionController {
             }
         }
         list.add(questionInfo);
+    }
+
+    @RequestMapping(value = "/deleteQuestion/{questionId}", produces = "application/json;charset=UTF-8")
+    public String deleteQuestionByQuestionId(@PathVariable("questionId") Integer questionId) {
+        if (questionMap == null) {
+            initQuestionMap();
+        }
+        if (questionId < 0) {
+            return ApiResult.writeError(ErrorCode.WRONG_QUESTION_ID);
+        }
+        List<QuestionInfo> questionList = questionService.getQuestionByQuestionId(questionId);
+        if (questionList.size() == 0) {
+            return ApiResult.writeError(ErrorCode.NO_SUCH_QUESTION);
+        }
+        QuestionInfo questionInfo = questionList.get(0);
+        try {
+            deleteQuestion(questionInfo);
+        } catch (QuestionAlreadyDeletedException e) {
+            return ApiResult.writeError(e);
+        }
+        return ApiResult.writeSuccess();
+    }
+
+    private static synchronized void deleteQuestion(QuestionInfo questionInfo) throws QuestionAlreadyDeletedException {
+        List<QuestionInfo> list = questionMap.get(questionInfo.getType());
+        for (QuestionInfo question: list) {
+            if (question.getQuestionId() == questionInfo.getQuestionId()) {
+                list.remove(question);
+                return;
+            }
+        }
+        throw new QuestionAlreadyDeletedException("题号为"+questionInfo.getQuestionId());
     }
 
     @RequestMapping(value = "/getTest", produces = "application/json;charset=UTF-8")

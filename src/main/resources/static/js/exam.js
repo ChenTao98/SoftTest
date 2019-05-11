@@ -138,25 +138,43 @@ window.onload = function () {
     $("#result-body").on('click', '.btn-add', function () {
 
         var id = $(this).data('id');
+
+        // 第一次点击之后要等前一次完成才能继续点击。
+        if ($(this).hasClass("disableCss")) {
+            console.log("can't click twice before task completed...");
+            return;
+        }
+        $(this).addClass("disableCss");
+        console.log("add class disableCss");
+
+
         if ($(this).hasClass("label-success")) {
             console.log("add question...");
+            var that = this;
             $.ajax({
                 url: "/api/question/" + id,
                 type: "POST",
                 dataType: "json",
                 success: function (question) {
-                    window.type2Questions[question.type][question.questionId] = question;
-                    console.log(window.type2Questions);
+                    window.setTimeout( function () {
+                        console.log("remove class disableCss");
+                        $(that).removeClass("disableCss");
+                        window.type2Questions[question.type][question.questionId] = question;
+                        console.log(window.type2Questions);
+                    }, 5000 ); // 5 seconds
                 }
             });
             $(this).removeClass('label-success').addClass('label-danger').text("移除")
         } else {
             console.log("delete question...");
+            var that = this;
             $.ajax({
                 url: "/api/question/" + id,
                 type: "POST",
                 dataType: "json",
                 success: function (question) {
+                    console.log("remove class disableCss");
+                    $(that).removeClass("disableCss");
                     delete window.type2Questions[question.type][question.questionId];
                     console.log(window.type2Questions[question.type]['count']);
                 }

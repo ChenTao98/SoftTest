@@ -14,7 +14,8 @@ public enum ErrorCode {
     //其他
     WRONG_QUESTION_ID(7, "题目ID错误"),
     NO_SUCH_QUESTION(8, "题目不存在"),
-    QUESTION_ALREADY_ADDED(9, "题目已经添加了");
+    QUESTION_ALREADY_ADDED(9, "题目已经添加了"),
+    QUESTION_ALREADY_DELETED(10, "题目已经删除了");
     private int errorCode;
     private String type;
     ErrorCode(int errorCode, String type) {
