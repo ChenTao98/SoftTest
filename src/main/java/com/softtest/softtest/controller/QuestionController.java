@@ -5,15 +5,14 @@ import com.softtest.softtest.entity.QuestionInfo;
 import com.softtest.softtest.entity.QuestionType;
 import com.softtest.softtest.service.QuestionService;
 import com.softtest.softtest.util.ApiResult;
+import com.softtest.softtest.util.errCode.ErrorCode;
+import com.softtest.softtest.util.errCode.sub.QuestionAlreadyAddedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
@@ -25,7 +24,7 @@ public class QuestionController {
     private static Map<String, List<QuestionInfo>> questionMap = null;
 
     private void initQuestionMap() {
-        questionMap = new ConcurrentHashMap<>(new HashMap<>());
+        questionMap = Collections.synchronizedMap(new HashMap<>());
         List<QuestionType> types = questionService.getQuestionType();
         for (QuestionType type: types) {
             questionMap.put(type.getName(), new ArrayList<>());
@@ -56,15 +55,30 @@ public class QuestionController {
         if (questionMap == null) {
             initQuestionMap();
         }
-//        if (questionId < 0) {
-//            return null;
-//        }
-//        List<QuestionInfo> questionList = questionService.getQuestionByQuestionId(questionId);
-//        if (questionList.size() == 0) {
-//            return null;
-//        }
-//        return questionList.get(0);
+        if (questionId < 0) {
+            return ApiResult.writeError(ErrorCode.WRONG_QUESTION_ID);
+        }
+        List<QuestionInfo> questionList = questionService.getQuestionByQuestionId(questionId);
+        if (questionList.size() == 0) {
+            return ApiResult.writeError(ErrorCode.NO_SUCH_QUESTION);
+        }
+        QuestionInfo questionInfo = questionList.get(0);
+        try {
+            addQuestion(questionInfo);
+        } catch (QuestionAlreadyAddedException e) {
+            return ApiResult.writeError(e);
+        }
         return ApiResult.writeSuccess();
+    }
+
+    private static synchronized void addQuestion(QuestionInfo questionInfo) throws QuestionAlreadyAddedException {
+        List<QuestionInfo> list = questionMap.get(questionInfo.getType());
+        for (QuestionInfo question: list) {
+            if (question.getQuestionId() == questionInfo.getQuestionId()) {
+                throw new QuestionAlreadyAddedException("问题ID为"+questionInfo.getQuestionId());
+            }
+        }
+        list.add(questionInfo);
     }
 
     @RequestMapping(value = "/getTest", produces = "application/json;charset=UTF-8")

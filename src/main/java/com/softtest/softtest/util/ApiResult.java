@@ -44,7 +44,12 @@ public class ApiResult {
 		return ApiJson.toJson(ret);
 	}
 
+	// exception中存储了详细信息
 	public static String writeError(ErrorCodeException exception){
-		return writeError(exception.getErrCode(), exception.getType() + "：" + exception.getMessage());
+		return writeError(exception.getErrCode(), exception.getType() + "：" + exception.getDetails());
+	}
+
+	public static String writeError(ErrorCode errorCode) {
+		return writeError(errorCode.getErrorCode(), errorCode.getType());
 	}
 }

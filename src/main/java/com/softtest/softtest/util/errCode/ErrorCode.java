@@ -9,7 +9,12 @@ public enum ErrorCode {
     WRONG_DIFFICULTY(3, "题目难度不符合标准"),
     WRONG_LANGUAGE(4, "题目语言不符合标准"),
     BLACK_AUTHOR(5, "题目作者在黑名单中"),
-    BEYOND_PROJECTS(6, "题目在制定项目范围外");
+    BEYOND_PROJECTS(6, "题目在制定项目范围外"),
+
+    //其他
+    WRONG_QUESTION_ID(7, "题目ID错误"),
+    NO_SUCH_QUESTION(8, "题目不存在"),
+    QUESTION_ALREADY_ADDED(9, "题目已经添加了");
     private int errorCode;
     private String type;
     ErrorCode(int errorCode, String type) {
