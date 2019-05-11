@@ -152,34 +152,43 @@ window.onload = function () {
             console.log("add question...");
             var that = this;
             $.ajax({
-                url: "/api/question/" + id,
+                url: "/api/addQuestion/" + id,
                 type: "POST",
                 dataType: "json",
-                success: function (question) {
-                    window.setTimeout( function () {
-                        console.log("remove class disableCss");
-                        $(that).removeClass("disableCss");
-                        window.type2Questions[question.type][question.questionId] = question;
-                        console.log(window.type2Questions);
-                    }, 5000 ); // 5 seconds
+                success: function (res) {
+                    console.log("remove class disableCss");
+                    $(that).removeClass("disableCss");
+                    if (res.errorCode == 0) {
+                        alert(res.message);
+                        $(that).removeClass('label-success').addClass('label-danger').text("移除");
+                    }
+                    else {
+                        alert(res.message);
+                    }
                 }
             });
-            $(this).removeClass('label-success').addClass('label-danger').text("移除")
+
         } else {
             console.log("delete question...");
             var that = this;
             $.ajax({
-                url: "/api/question/" + id,
+                url: "/api/deleteQuestion/" + id,
                 type: "POST",
                 dataType: "json",
-                success: function (question) {
+                success: function (res) {
                     console.log("remove class disableCss");
                     $(that).removeClass("disableCss");
-                    delete window.type2Questions[question.type][question.questionId];
-                    console.log(window.type2Questions[question.type]['count']);
+                    if (res.errorCode == 0) {
+                        alert(res.message);
+                        // 成功
+                        $(that).removeClass('label-danger').addClass('label-success').text("添加");
+                    }
+                    else {
+                        alert(res.message);
+                    }
                 }
             });
-            $(this).removeClass('label-danger').addClass('label-success').text("添加")
+
         }
     });
 
@@ -211,21 +220,35 @@ window.onload = function () {
         body.html("");
         console.log("preview question...");
         console.log(window.type2Questions);
-        $.each(window.type2Questions, function (type, questions) {
-            console.log(type);
-            if (!$.isEmptyObject(questions)) {
-                body.append(
-                    "<div class='.'>" +
-                    "<h1>" + type + "</h1>"
-                );
-                var idx = 1;
-                $.each(questions, function (id, question) {
-                    console.log(question);
-                    body.append(parseToQuestion(question, idx++))
-                });
-                body.append("</div>")
+        $.ajax({
+            url: "/api/getTest",
+            type: "POST",
+            dataType: "json",
+            success: function (res) {
+                if (res.errorCode == 0) {
+                    alert(res.message);
+                    var data = res.data;
+                    console.log(data);
+                    $.each(data, function (type, questions) {
+                        console.log(type);
+                        if (!$.isEmptyObject(questions)) {
+                            body.append(
+                                "<div class='.'>" +
+                                "<h1>" + type + "</h1>"
+                            );
+                            var idx = 1;
+                            $.each(questions, function (id,question) {
+                                console.log(question);
+                                body.append(parseToQuestion(question, idx++))
+                            });
+                            body.append("</div>")
+                        }
+                    });
+                }
+                else {
+                    alert(res.message);
+                }
             }
-
         });
     });
 

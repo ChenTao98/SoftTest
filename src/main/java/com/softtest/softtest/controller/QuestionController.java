@@ -115,11 +115,11 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/getTest", produces = "application/json;charset=UTF-8")
-    public Map<String , List<QuestionInfo>> getTest() {
+    public String getTest() {
         if (questionMap == null) {
             initQuestionMap();
         }
-        return questionMap;
+        return ApiResult.writeData(questionMap);
     }
 
     @RequestMapping(value = "/question/{questionId}", produces = "application/json;charset=UTF-8")
