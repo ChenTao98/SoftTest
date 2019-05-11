@@ -136,8 +136,10 @@ window.onload = function () {
     });
 
     $("#result-body").on('click', '.btn-add', function () {
+
         var id = $(this).data('id');
         if ($(this).hasClass("label-success")) {
+            console.log("add question...");
             $.ajax({
                 url: "/api/question/" + id,
                 type: "POST",
@@ -149,6 +151,7 @@ window.onload = function () {
             });
             $(this).removeClass('label-success').addClass('label-danger').text("移除")
         } else {
+            console.log("delete question...");
             $.ajax({
                 url: "/api/question/" + id,
                 type: "POST",
@@ -188,6 +191,7 @@ window.onload = function () {
         console.log("被选中的问题如下： ");
         var body = modal.find(".modal-body");
         body.html("");
+        console.log("preview question...");
         console.log(window.type2Questions);
         $.each(window.type2Questions, function (type, questions) {
             console.log(type);

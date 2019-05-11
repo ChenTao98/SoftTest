@@ -1,0 +1,23 @@
+package com.softtest.softtest.util.errCode;
+
+import com.softtest.softtest.util.errCode.ErrorCode;
+
+public abstract class ErrorCodeException extends Exception {
+    private int errCode;
+    private String type;
+    // protected String msg;
+    // ErrorCode 放着类型和错误码信息， message放着详细信息。
+    public ErrorCodeException(ErrorCode errorCode, String message) {
+        super(message);
+        this.errCode = errorCode.getErrorCode();
+        this.type = errorCode.getType();
+    }
+
+    public int getErrCode() {
+        return errCode;
+    }
+
+    public String getType() {
+        return type;
+    }
+}
