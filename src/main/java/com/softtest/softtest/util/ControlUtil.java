@@ -128,14 +128,21 @@ public class ControlUtil {
     public void checkProjectsRange(Map<String, List<QuestionInfo>> map, List<String> projectsList) throws BeyondProjectsException {
         for (List<QuestionInfo> questionInfos : map.values()) {
             for (QuestionInfo questionInfo : questionInfos) {
+                boolean isExist = false;
                 for (String string : projectsList) {
                     if (string.equals(questionInfo.getProject())) {
-                        return;
+                        isExist = true;
+                        break;
                     }
 
                 }
-                throw new BeyondProjectsException("题目在制定项目范围外");
+                if (!isExist) {
+                    throw new BeyondProjectsException("题目在制定项目范围外");
+                }
+
             }
+
+
         }
 
 
