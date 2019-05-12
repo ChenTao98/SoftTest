@@ -28,8 +28,21 @@ public class TestCheckScore {
         map.put("问答题", initList("问答题", 2));
     }
 
+    //测试传入入map为空
     @Test
-    public void testSomeQuestionNull() {
+    public void testMapNull() {
+        map = null;
+        try {
+            controlUtil.checkScore(map);
+            fail();
+        } catch (WrongScoreException e) {
+            assertEquals("传入map为空", e.getDetails());
+        }
+    }
+
+    //测试某个类型的题目的list为空或者长度为0
+    @Test
+    public void testSomeQuestionListNull() {
         map.replace("情景题", new ArrayList<>());
         map.remove("情景题");
         try {
@@ -48,30 +61,72 @@ public class TestCheckScore {
         }
     }
 
+    //测试某个题目为空
     @Test
-    public void testQuestionLessScore() {
+    public void testSomeQuestionNull() {
+        List<QuestionInfo> list = map.get("填空题");
+        list.set(0, null);
+        try {
+            controlUtil.checkScore(map);
+            fail();
+        } catch (WrongScoreException e) {
+            assertEquals("题型：填空题中某题为空", e.getDetails());
+        }
+    }
+
+    //测试某个题目的分数低于单题最低分数
+    @Test
+    public void testSomeQuestionLessScore() {
+        List<QuestionInfo> list = map.get("填空题");
+        list.get(0).setScore(0);
+        try {
+            controlUtil.checkScore(map);
+            fail();
+        } catch (WrongScoreException e) {
+            assertEquals("题型：填空题某题分数小于单题最低分数", e.getDetails());
+        }
+    }
+
+    //测试某个题目的分数高于单题最高分数
+    @Test
+    public void testSomeQuestionMoorScore() {
+        List<QuestionInfo> list = map.get("填空题");
+        list.get(0).setScore(3);
+        try {
+            controlUtil.checkScore(map);
+            fail();
+        } catch (WrongScoreException e) {
+            assertEquals("题型：填空题某题分数高于单题最高分数", e.getDetails());
+        }
+    }
+
+    //测试某个类型总分数低于最低分数
+    @Test
+    public void testQuestionTotalLessScore() {
         List<QuestionInfo> list = map.get("填空题");
         list.remove(0);
         try {
             controlUtil.checkScore(map);
             fail();
         } catch (WrongScoreException e) {
-            assertEquals("题型：填空题分数小于最低分数", e.getDetails());
+            assertEquals("题型：填空题总分数小于最低分数", e.getDetails());
         }
     }
 
+    //测试某个类型总分数高于最高分数
     @Test
-    public void testQuestionMoreScore() {
+    public void testQuestionTotalMoreScore() {
         List<QuestionInfo> list = map.get("填空题");
         list.add(new QuestionInfo("填空题", 2));
         try {
             controlUtil.checkScore(map);
             fail();
         } catch (WrongScoreException e) {
-            assertEquals("题型：填空题分数高于最高分数", e.getDetails());
+            assertEquals("题型：填空题总分数高于最高分数", e.getDetails());
         }
     }
 
+    //测试试卷总分数低于最低分数
     @Test
     public void testTotalLessScore() {
         List<QuestionInfo> list = map.get("单选题");
@@ -84,6 +139,7 @@ public class TestCheckScore {
         }
     }
 
+    //测试试卷总分数高于最高分数
     @Test
     public void testTotalMoreScore() {
         List<QuestionInfo> list = map.get("填空题");
@@ -96,6 +152,7 @@ public class TestCheckScore {
         }
     }
 
+    //测试正确数据
     @Test
     public void testTotalScoreRight() {
         try {

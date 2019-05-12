@@ -31,22 +31,25 @@ public class ControlUtil {
     // 分数控制：试卷的总分应该在哪个范围内，不同类型的题目总分需要在一定范围内。
     // 由于所有题目都是一分的，所以暂时先定成这样。
     // 总数量：20 到 22题，20到20分
-    // 单选题： 4到5题， 4到5分
-    // 多选题： 4到5题， 4到5分
-    // 填空题： 4到5题， 4到5分
-    // 情景题： 2到3题， 2到3分
-    // 视频题： 2到3题， 2到3分
-    // 问答题： 2到3题， 2到3分
+    // 单选题： 4到5题， 4到5分，每题1-2两分
+    // 多选题： 4到5题， 4到5分，每题1-2两分
+    // 填空题： 4到5题， 4到5分，每题1-2两分
+    // 情景题： 2到3题， 2到3分，每题1-2两分
+    // 视频题： 2到3题， 2到3分，每题1-2两分
+    // 问答题： 2到3题， 2到3分，每题1-2两分
     // 陈涛
     public void checkScore(Map<String, List<QuestionInfo>> map) throws WrongScoreException {
+        if (map == null) {
+            throw new WrongScoreException("传入map为空");
+        }
         int total = 0;
         ArrayList<QuestionNode> arrayList = new ArrayList<>();
-        arrayList.add(new QuestionNode("单选题", 4, 5));
-        arrayList.add(new QuestionNode("多选题", 4, 5));
-        arrayList.add(new QuestionNode("填空题", 4, 5));
-        arrayList.add(new QuestionNode("情景题", 2, 3));
-        arrayList.add(new QuestionNode("视频题", 2, 3));
-        arrayList.add(new QuestionNode("问答题", 2, 3));
+        arrayList.add(new QuestionNode("单选题", 1, 2, 4, 5));
+        arrayList.add(new QuestionNode("多选题", 1, 2, 4, 5));
+        arrayList.add(new QuestionNode("填空题", 1, 2, 4, 5));
+        arrayList.add(new QuestionNode("情景题", 1, 2, 2, 3));
+        arrayList.add(new QuestionNode("视频题", 1, 2, 2, 3));
+        arrayList.add(new QuestionNode("问答题", 1, 2, 2, 3));
         for (QuestionNode questionNode : arrayList) {
             int tempScore = 0;
             List<QuestionInfo> list = map.get(questionNode.type);
@@ -54,12 +57,21 @@ public class ControlUtil {
                 throw new WrongScoreException("题型：" + questionNode.type + "没有加入");
             }
             for (QuestionInfo questionInfo : list) {
-                tempScore += questionInfo.getScore();
+                if (questionInfo == null) {
+                    throw new WrongScoreException("题型：" + questionNode.type + "中某题为空");
+                }
+                int score = questionInfo.getScore();
+                if (score < questionNode.getMinScoreEach()) {
+                    throw new WrongScoreException("题型：" + questionNode.type + "某题分数小于单题最低分数");
+                } else if (score > questionNode.getMaxScoreEach()) {
+                    throw new WrongScoreException("题型：" + questionNode.type + "某题分数高于单题最高分数");
+                }
+                tempScore += score;
             }
-            if (tempScore < questionNode.minScore) {
-                throw new WrongScoreException("题型：" + questionNode.type + "分数小于最低分数");
-            } else if (tempScore > questionNode.maxScore) {
-                throw new WrongScoreException("题型：" + questionNode.type + "分数高于最高分数");
+            if (tempScore < questionNode.getMinTotalScore()) {
+                throw new WrongScoreException("题型：" + questionNode.type + "总分数小于最低分数");
+            } else if (tempScore > questionNode.getMaxTotalScore()) {
+                throw new WrongScoreException("题型：" + questionNode.type + "总分数高于最高分数");
             }
             total += tempScore;
         }
@@ -79,20 +91,20 @@ public class ControlUtil {
     // 视频题：2到3
     // 问答题：2到3
     // 阮雯强
-    public void checkDifficulty(Map<String, List<QuestionInfo>> map) throws WrongDifficultyException {
-        int number=0;
-        int diff=0;
-        for(Map.Entry<String,List<QuestionInfo>> entry:map.entrySet()){
-            double tmpDiff=0;
-            double tmpNumber=0;
-            List<QuestionInfo> list=entry.getValue();
-            for (int i=0;i<list.size();i++){
+    public static void checkDifficulty(Map<String, List<QuestionInfo>> map) throws WrongDifficultyException {
+        int number = 0;
+        int diff = 0;
+        for (Map.Entry<String, List<QuestionInfo>> entry : map.entrySet()) {
+            double tmpDiff = 0;
+            double tmpNumber = 0;
+            List<QuestionInfo> list = entry.getValue();
+            for (int i = 0; i < list.size(); i++) {
                 tmpNumber++;
-                tmpDiff+=list.get(i).getDifficulty();
+                tmpDiff += list.get(i).getDifficulty();
             }
-            double ave=tmpDiff/tmpNumber;
-            if(ave<2||ave>3){
-                throw new WrongDifficultyException(entry.getKey()+"难度不在范围内");
+            double ave = tmpDiff / tmpNumber;
+            if (ave < 2 || ave > 3) {
+                throw new WrongDifficultyException(entry.getKey() + "难度不在范围内");
             }
         }
     }
@@ -131,13 +143,17 @@ public class ControlUtil {
 
     class QuestionNode {
         private String type;
-        private int minScore;
-        private int maxScore;
+        private int minTotalScore;
+        private int maxTotalScore;
+        private int minScoreEach;
+        private int maxScoreEach;
 
-        QuestionNode(String type, int minScore, int maxScore) {
+        QuestionNode(String type, int minScoreEach, int maxScoreEach, int minTotalScore, int maxTotalScore) {
             this.type = type;
-            this.maxScore = maxScore;
-            this.minScore = minScore;
+            this.maxTotalScore = maxTotalScore;
+            this.minTotalScore = minTotalScore;
+            this.minScoreEach = minScoreEach;
+            this.maxScoreEach = maxScoreEach;
         }
 
         public String getType() {
@@ -148,20 +164,36 @@ public class ControlUtil {
             this.type = type;
         }
 
-        public int getMaxScore() {
-            return maxScore;
+        public int getMaxTotalScore() {
+            return maxTotalScore;
         }
 
-        public void setMaxScore(int maxScore) {
-            this.maxScore = maxScore;
+        public void setMaxTotalScore(int maxTotalScore) {
+            this.maxTotalScore = maxTotalScore;
         }
 
-        public int getMinScore() {
-            return minScore;
+        public int getMinTotalScore() {
+            return minTotalScore;
         }
 
-        public void setMinScore(int minScore) {
-            this.minScore = minScore;
+        public void setMinTotalScore(int minTotalScore) {
+            this.minTotalScore = minTotalScore;
+        }
+
+        public int getMaxScoreEach() {
+            return maxScoreEach;
+        }
+
+        public void setMaxScoreEach(int maxScoreEach) {
+            this.maxScoreEach = maxScoreEach;
+        }
+
+        public int getMinScoreEach() {
+            return minScoreEach;
+        }
+
+        public void setMinScoreEach(int minScoreEach) {
+            this.minScoreEach = minScoreEach;
         }
     }
 }
