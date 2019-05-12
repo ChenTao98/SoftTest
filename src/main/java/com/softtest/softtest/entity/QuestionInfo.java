@@ -30,6 +30,10 @@ public class QuestionInfo {
         this.score = score;
     }
 
+    public QuestionInfo(String project) {
+        this.project = project;
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }

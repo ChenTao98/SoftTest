@@ -100,6 +100,18 @@ public class ControlUtil {
     // 项目控制功能： 指定项目范围，出现的题目必须包含在指定的项目之内。
     // 汤启顺
     public void checkProjectsRange(Map<String, List<QuestionInfo>> map, List<String> projectsList) throws BeyondProjectsException {
+        for (List<QuestionInfo> questionInfos : map.values()) {
+            for (QuestionInfo questionInfo : questionInfos) {
+                for (String string : projectsList) {
+                    if (string.equals(questionInfo.getProject())) {
+                        return;
+                    }
+
+                }
+                throw new BeyondProjectsException("题目在制定项目范围外");
+            }
+        }
+
 
     }
 
