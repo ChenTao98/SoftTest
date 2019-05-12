@@ -21,6 +21,7 @@ public class ControlUtil {
     // 情景题： 2到3题， 2到3分
     // 视频题： 2到3题， 2到3分
     // 问答题： 2到3题， 2到3分
+    // 谢东方
     public void checkQuestionQuantity(Map<String , List<QuestionInfo>> map) throws WrongQuantityException {
 
     }
@@ -35,6 +36,7 @@ public class ControlUtil {
     // 情景题： 2到3题， 2到3分
     // 视频题： 2到3题， 2到3分
     // 问答题： 2到3题， 2到3分
+    // 陈涛
     public void checkScore(Map<String , List<QuestionInfo>> map) throws WrongScoreException {
 
     }
@@ -47,23 +49,26 @@ public class ControlUtil {
     // 情景题：2到3
     // 视频题：2到3
     // 问答题：2到3
-
+    // 阮雯强
     public void checkDifficulty(Map<String , List<QuestionInfo>> map) throws WrongDifficultyException {
 
     }
     // 语言控制：试卷的语言可以出现，中文+英文，中文+法文，中文，法文。规则：只能出现一种语言或者两种语言，当出现两种语言时，必须为中文+其他语言，
     //          不能出现三种以上的语言。
+    // 陈雷远
     public void checkLanguage(Map<String , List<QuestionInfo>> map) throws WrongLanguageException {
 
     }
 
 
     // 作者黑名单功能：指定作者黑名单，当出现黑名单中的作者时，应该报错提醒。
+    // 张健
     public void checkBlackAuthor (Map<String , List<QuestionInfo>> map, List<String> blackAuthorList) throws BlackAuthorException {
 
     }
 
     // 项目控制功能： 指定项目范围，出现的题目必须包含在指定的项目之内。
+    // 汤启顺
     public void checkProjectsRange(Map<String , List<QuestionInfo>> map, List<String> projectsList) throws BeyondProjectsException {
 
     }
