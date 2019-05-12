@@ -25,6 +25,11 @@ public class QuestionInfo {
         this.language = language;
     }
 
+    public QuestionInfo(String type, Integer score) {
+        this.type = type;
+        this.score = score;
+    }
+
     public Integer getQuestionId() {
         return questionId;
     }
