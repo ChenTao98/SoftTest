@@ -80,7 +80,21 @@ public class ControlUtil {
     // 问答题：2到3
     // 阮雯强
     public void checkDifficulty(Map<String, List<QuestionInfo>> map) throws WrongDifficultyException {
-
+        int number=0;
+        int diff=0;
+        for(Map.Entry<String,List<QuestionInfo>> entry:map.entrySet()){
+            double tmpDiff=0;
+            double tmpNumber=0;
+            List<QuestionInfo> list=entry.getValue();
+            for (int i=0;i<list.size();i++){
+                tmpNumber++;
+                tmpDiff+=list.get(i).getDifficulty();
+            }
+            double ave=tmpDiff/tmpNumber;
+            if(ave<2||ave>3){
+                throw new WrongDifficultyException(entry.getKey()+"难度不在范围内");
+            }
+        }
     }
 
     // 语言控制：试卷的语言可以出现，中文+英文，中文+法文，中文，法文。规则：只能出现一种语言或者两种语言，当出现两种语言时，必须为中文+其他语言，
