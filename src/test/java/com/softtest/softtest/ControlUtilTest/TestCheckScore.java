@@ -31,9 +31,8 @@ public class TestCheckScore {
     //测试传入入map为空
     @Test
     public void testMapNull() {
-        map = null;
         try {
-            controlUtil.checkScore(map);
+            controlUtil.checkScore(null);
             fail();
         } catch (WrongScoreException e) {
             assertEquals("传入map为空", e.getDetails());
