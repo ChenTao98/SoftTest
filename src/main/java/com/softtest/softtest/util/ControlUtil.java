@@ -17,15 +17,49 @@ public class ControlUtil {
 
     // 题目数量控制：题目的总数量多少个，可以有一定范围，不同类型的题目数量各应该有多少个。
     // 总数量：20 到 22题，20到20分
-    // 单选题： 4到5题， 4到5分
-    // 多选题： 4到5题， 4到5分
-    // 填空题： 4到5题， 4到5分
-    // 情景题： 2到3题， 2到3分
-    // 视频题： 2到3题， 2到3分
-    // 问答题： 2到3题， 2到3分
+    // 单选题： 4到5题
+    // 多选题： 4到5题
+    // 填空题： 4到5题
+    // 情景题： 2到3题
+    // 视频题： 2到3题
+    // 问答题： 2到3题
     // 谢东方
-    public void checkQuestionQuantity(Map<String, List<QuestionInfo>> map) throws WrongQuantityException {
+    public static void checkQuestionQuantity(Map<String, List<QuestionInfo>> map) throws WrongQuantityException {
+        if (map == null) {
+            throw new WrongQuantityException("map empty");
+        }
+        int totalQuantity = 0;
+        int maxQuantity = 22;
+        int minQuantity = 20;
+        ArrayList<QuantityNode> nodeList = new ArrayList<>();
+        nodeList.add(new QuantityNode("单选题", 4, 5));
+        nodeList.add(new QuantityNode("多选题", 4, 5));
+        nodeList.add(new QuantityNode("填空题", 4, 5));
+        nodeList.add(new QuantityNode("情景题", 2, 3));
+        nodeList.add(new QuantityNode("视频题", 2, 3));
+        nodeList.add(new QuantityNode("问答题", 2, 3));
 
+        for (QuantityNode node : nodeList) {
+            List<QuestionInfo> questionInfos = map.get(node.getType());
+            if (questionInfos == null || questionInfos.size() == 0) {
+                throw new WrongQuantityException("no question type: " + node.getType());
+            }
+
+            int size = questionInfos.size();
+            totalQuantity += size;
+            if (size > node.getMaxQuantity()) {
+                throw new WrongQuantityException("too many questions");
+            }
+            if (size < node.getMinQuantity()) {
+                throw new WrongQuantityException("too few questions");
+            }
+        }
+        if (totalQuantity > maxQuantity) {
+            throw new WrongQuantityException("too many questions in total");
+        }
+        if (totalQuantity < minQuantity) {
+            throw new WrongQuantityException("too few questions in total");
+        }
     }
 
 
@@ -230,4 +264,28 @@ public class ControlUtil {
             this.minScoreEach = minScoreEach;
         }
     }
+
+    static class QuantityNode {
+        private String type;
+        private int maxQuantity;
+        private int minQuantity;
+        protected QuantityNode(String type, int minQuantity, int maxQuantity) {
+            this.type = type;
+            this.maxQuantity = maxQuantity;
+            this.minQuantity = minQuantity;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public int getMaxQuantity() {
+            return maxQuantity;
+        }
+
+        public int getMinQuantity() {
+            return minQuantity;
+        }
+    }
+
 }
