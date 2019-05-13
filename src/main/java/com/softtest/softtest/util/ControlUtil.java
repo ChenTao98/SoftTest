@@ -4,6 +4,7 @@ import com.softtest.softtest.entity.QuestionInfo;
 import com.softtest.softtest.util.errCode.sub.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +121,33 @@ public class ControlUtil {
     // 作者黑名单功能：指定作者黑名单，当出现黑名单中的作者时，应该报错提醒。
     // 张健
     public void checkBlackAuthor(Map<String, List<QuestionInfo>> map, List<String> blackAuthorList) throws BlackAuthorException {
+        if (null == blackAuthorList || null == map)
+            throw new NullPointerException();
+        checkBlackAuthorList(blackAuthorList);
+        if (blackAuthorList.size() > 0) {
+            for (Map.Entry<String, List<QuestionInfo>> entry : map.entrySet()) {
+                List<QuestionInfo> questionInfoList = entry.getValue();
+                for (QuestionInfo info : questionInfoList) {
+                    if (blackAuthorList.contains(info.getAuthor()))
+                        throw new BlackAuthorException("作者：" + info.getAuthor() + "在黑名单中，请谨慎添加该题目");
+                }
+            }
+        }
+    }
 
+    // 不要重复添加
+    private void checkBlackAuthorList(List<String> blackAuthorList) throws BlackAuthorException {
+        if (null == blackAuthorList)
+            throw new NullPointerException();
+        HashSet<String> authorSet = new HashSet<>();
+        if (blackAuthorList.size() > 0) {
+            for (String author : blackAuthorList) {
+                if (authorSet.contains(author)) {
+                    throw new BlackAuthorException("重复添加作者到黑名单");
+                }
+                authorSet.add(author);
+            }
+        }
     }
 
     // 项目控制功能： 指定项目范围，出现的题目必须包含在指定的项目之内。
