@@ -1,5 +1,6 @@
 package com.softtest.softtest.ControlUtilTest;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import com.softtest.softtest.entity.QuestionInfo;
 import com.softtest.softtest.util.errCode.sub.WrongDifficultyException;
 import junit.framework.TestCase;
@@ -26,7 +27,7 @@ public class DiffCheckTest {
         List<QuestionInfo> list=new LinkedList<>();
         QuestionInfo t1=new QuestionInfo(1,"test1","单选题","a","1",4,4,"as","12","as");
         list.add(t1);
-        Map<String , List<QuestionInfo>> map=new HashMap<>();
+        Map<String, List<QuestionInfo>> map=new HashMap<>();
         map.put("单选题",list);
         try {
             ControlUtil.checkDifficulty(map);
