@@ -25,6 +25,10 @@ public class QuestionInfo {
         this.language = language;
     }
 
+    public QuestionInfo(String project,String language) {
+        this.language = language;
+
+    }
     public QuestionInfo(String type, Integer score) {
         this.type = type;
         this.score = score;
