@@ -1,5 +1,4 @@
 package com.softtest.softtest.util;
-
 import com.softtest.softtest.entity.QuestionInfo;
 import com.softtest.softtest.util.errCode.sub.*;
 
@@ -147,8 +146,21 @@ public class ControlUtil {
     // 语言控制：试卷的语言可以出现，中文+英文，中文+法文，中文，法文。规则：只能出现一种语言或者两种语言，当出现两种语言时，必须为中文+其他语言，
     //          不能出现三种以上的语言。
     // 陈雷远
-    public void checkLanguage(Map<String, List<QuestionInfo>> map) throws WrongLanguageException {
-
+    public static void checkLanguage(Map<String, List<QuestionInfo>> map) throws WrongLanguageException {
+        ArrayList<String> lans = new ArrayList<>();
+        for (Map.Entry<String, List<QuestionInfo>> entry : map.entrySet()) {
+            List<QuestionInfo> list = entry.getValue();
+            for (int i = 0; i < list.size(); i++) {
+                if (!lans.contains(list.get(i).getLanguage())){
+                    lans.add(list.get(i).getLanguage());
+                }
+            }
+        }
+        if(lans.size()>2){
+            throw new WrongLanguageException("有三种或三种以上语言");
+        }else if(lans.size()==2 && !lans.contains("中文")){
+            throw new WrongLanguageException("有两种语言且不含中文");
+        }
     }
 
 
